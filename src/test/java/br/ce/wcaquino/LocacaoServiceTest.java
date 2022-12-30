@@ -4,7 +4,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,10 +41,10 @@ public class LocacaoServiceTest {
 	public void testeLocacao() throws Exception {
 		//cenario
 		Usuario usuario = new Usuario("usuario 1");
-		Filme filme = new Filme("filme 1", 2, 5.0);
+		List<Filme> filmes = Arrays.asList( new Filme("filme 1", 2, 5.0));
 
 		//acao
-		Locacao locacao = locacaoService.alugarFilme(usuario, filme);
+		Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
 			
 		//verificacao
 		error.checkThat(locacao.getValor(), is(5.0));
@@ -57,10 +59,10 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecaoQuandoNaoHouverEstoque() throws Exception{
 		//cenario
 		Usuario usuario = new Usuario("usuario 1");
-		Filme filme = new Filme("filme 1", 0, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("filme 1", 0, 5.0));
 
 		//acao
-		Locacao locacao = locacaoService.alugarFilme(usuario, filme);
+		Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
 	}
 
 	/*
@@ -70,11 +72,11 @@ public class LocacaoServiceTest {
 	@Test
 	public void deveLancarExcecaoQuandoUsuarioForVazio() throws FilmeSemEstoqueException{
 		//cenario
-		Filme filme = new Filme("filme 1", 1, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("filme 1", 1, 5.0));
 
 		//acao
 		try {
-			Locacao locacao = locacaoService.alugarFilme(null, filme);
+			Locacao locacao = locacaoService.alugarFilme(null, filmes);
 			fail();
 		} catch (LocacaoException e) {
 			assertThat(e.getMessage(), is("Usuario vazio"));
@@ -86,7 +88,7 @@ public class LocacaoServiceTest {
 	 * Após o lançamento do exceção a função para
 	 */
 	@Test
-	public void deveLancarExcecaoQuandoNaoHouverFilmeForVazio() throws LocacaoException, FilmeSemEstoqueException{
+	public void deveLancarExcecaoQuandoFilmeForVazio() throws LocacaoException, FilmeSemEstoqueException{
 		//cenario
 		Usuario usuario = new Usuario("usuario 1");
 
