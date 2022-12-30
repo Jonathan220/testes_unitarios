@@ -12,7 +12,7 @@ import br.ce.wcaquino.exceptions.LocacaoException;
 
 public class LocacaoService {
 	
-	public Locacao alugarFilme(Usuario usuario, Filme filme) throws Exception {
+	public Locacao alugarFilme(Usuario usuario, Filme filme) throws LocacaoException, FilmeSemEstoqueException {
 
 		if(usuario == null){
 			throw new LocacaoException("Usuario vazio");
