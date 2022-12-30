@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -27,10 +28,16 @@ public class LocacaoServiceTest {
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
+	private LocacaoService locacaoService;
+
+	@Before
+	public void setup(){
+		locacaoService = new LocacaoService();
+	}
+
     @Test
 	public void testeLocacao() throws Exception {
 		//cenario
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("usuario 1");
 		Filme filme = new Filme("filme 1", 2, 5.0);
 
@@ -49,7 +56,6 @@ public class LocacaoServiceTest {
 	@Test(expected = FilmeSemEstoqueException.class)
 	public void deveLancarExcecaoQuandoNaoHouverEstoque() throws Exception{
 		//cenario
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("usuario 1");
 		Filme filme = new Filme("filme 1", 0, 5.0);
 
@@ -64,7 +70,6 @@ public class LocacaoServiceTest {
 	@Test
 	public void deveLancarExcecaoQuandoUsuarioForVazio() throws FilmeSemEstoqueException{
 		//cenario
-		LocacaoService locacaoService = new LocacaoService();
 		Filme filme = new Filme("filme 1", 1, 5.0);
 
 		//acao
@@ -83,7 +88,6 @@ public class LocacaoServiceTest {
 	@Test
 	public void deveLancarExcecaoQuandoNaoHouverFilmeForVazio() throws LocacaoException, FilmeSemEstoqueException{
 		//cenario
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("usuario 1");
 
 		expectedException.expect(LocacaoException.class);
