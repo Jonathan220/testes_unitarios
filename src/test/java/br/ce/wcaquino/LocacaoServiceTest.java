@@ -62,7 +62,7 @@ public class LocacaoServiceTest {
 		List<Filme> filmes = Arrays.asList(new Filme("filme 1", 0, 5.0));
 
 		//acao
-		Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+		locacaoService.alugarFilme(usuario, filmes);
 	}
 
 	/*
@@ -76,7 +76,7 @@ public class LocacaoServiceTest {
 
 		//acao
 		try {
-			Locacao locacao = locacaoService.alugarFilme(null, filmes);
+			locacaoService.alugarFilme(null, filmes);
 			fail();
 		} catch (LocacaoException e) {
 			assertThat(e.getMessage(), is("Usuario vazio"));
@@ -96,7 +96,7 @@ public class LocacaoServiceTest {
 		expectedException.expectMessage("Filme vazio");
 	
 		//acao
-		Locacao locacao = locacaoService.alugarFilme(usuario, null);
+		locacaoService.alugarFilme(usuario, null);
 
 	}
 }
