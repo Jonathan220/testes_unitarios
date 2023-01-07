@@ -1,8 +1,8 @@
 package br.ce.wcaquino.servicos;
 
+import static br.ce.wcaquino.matchers.MatchersProprios.caiNumaSegunda;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -112,7 +112,6 @@ public class LocacaoServiceTest {
 
 		Locacao retorno = locacaoService.alugarFilme(usuario, filmes);
 
-		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
-		assertTrue(ehSegunda);
+		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
 	}
 }
