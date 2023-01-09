@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
+import br.ce.wcaquino.daos.LocacaoDao;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
@@ -38,6 +39,8 @@ public class CalculoValorLocacaoTest {
 	@Before
 	public void setup(){
 		locacaoService = new LocacaoService();
+		LocacaoDao dao = new LocacaoDaoFake();
+		locacaoService.setDataLocacaoDAO(dao);
 	}
 
 	private static Filme filme1 = umfilme().agora();
