@@ -38,7 +38,7 @@ public class LocacaoService {
 		}
 
 		boolean negativado;
-		
+
 		try {
 			negativado = spcService.possuiNegativado(usuario);
 		} catch (Exception e) {
@@ -88,6 +88,16 @@ public class LocacaoService {
 				emailService.notificarAtraso(locacao.getUsuario());
 			}
 		}
+	}
+
+	public void prorrogarLocacao(Locacao locacao, int dias){
+		Locacao novaLocacao = new Locacao();
+		novaLocacao.setUsuario(locacao.getUsuario());
+		novaLocacao.setFilmes(locacao.getFilmes());
+		novaLocacao.setDataLocacao(new Date());
+		novaLocacao.setDataRetorno(DataUtils.obterDataComDiferencaDias(dias));
+		novaLocacao.setValor(locacao.getValor() * dias);
+		dao.salvar(novaLocacao);
 	}
 
 }
