@@ -53,18 +53,7 @@ public class LocacaoService {
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
 		locacao.setDataLocacao(Calendar.getInstance().getTime());
-		Double valorTotal = 0d;
-		for(int i = 0; i < filmes.size(); i++){
-			Filme filme = filmes.get(i);
-			double valorFilme = filme.getPrecoLocacao();
-			switch(i){
-				case 2 : valorFilme = valorFilme * 0.75; break;
-				case 3 : valorFilme = valorFilme * 0.5; break;
-				case 4 : valorFilme = valorFilme * 0.25; break;
-				case 5 : valorFilme = 0; break;
-			}
-			valorTotal = valorTotal + valorFilme;
-		}
+		Double valorTotal = calcularValorLocacao(filmes);
 		locacao.setValor(valorTotal);
 
 		//Entrega no dia seguinte
@@ -79,6 +68,23 @@ public class LocacaoService {
 		dao.salvar(locacao);
 		
 		return locacao;
+	}
+
+	private Double calcularValorLocacao(List<Filme> filmes) {
+		System.out.println("Entrou aqui");
+		Double valorTotal = 0d;
+		for(int i = 0; i < filmes.size(); i++){
+			Filme filme = filmes.get(i);
+			double valorFilme = filme.getPrecoLocacao();
+			switch(i){
+				case 2 : valorFilme = valorFilme * 0.75; break;
+				case 3 : valorFilme = valorFilme * 0.5; break;
+				case 4 : valorFilme = valorFilme * 0.25; break;
+				case 5 : valorFilme = 0; break;
+			}
+			valorTotal = valorTotal + valorFilme;
+		}
+		return valorTotal;
 	}
 
 	public void notificarAtrasos(){
