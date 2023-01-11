@@ -7,22 +7,24 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.ce.wcaquino.builders.FilmeBuilder;
 import br.ce.wcaquino.builders.LocacaoBuilder;
@@ -36,6 +38,8 @@ import br.ce.wcaquino.exceptions.LocacaoException;
 import br.ce.wcaquino.matchers.MatchersProprios;
 import br.ce.wcaquino.utils.DataUtils;
 
+@PrepareForTest({LocacaoService.class, DataUtils.class})
+@RunWith(PowerMockRunner.class)
 public class LocacaoServiceTest {
 
 	@Rule
@@ -58,16 +62,16 @@ public class LocacaoServiceTest {
 
 	@Before
 	public void setup(){
-		MockitoAnnotations.openMocks(this);
+		MockitoAnnotations.initMocks(this);
 	}
 
     @Test
 	public void deveAlugarFilmeComSucesso() throws Exception {
-		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		//cenario
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umfilme().comValor(5.0).agora());
 
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(6, 1, 2023));
 		//acao
 		Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
 			
@@ -75,6 +79,8 @@ public class LocacaoServiceTest {
 		error.checkThat(locacao.getValor(), is(5.0));
 		error.checkThat(locacao.getDataLocacao(), MatchersProprios.ehHoje());
 		error.checkThat(locacao.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDias(1));
+		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), DataUtils.obterData(6, 1, 2023)), is(true));
+		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterData(7, 1, 2023)), is(true));
 	}
 
 	/*
@@ -126,15 +132,17 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void deveDevolverNaSegundaAoAlugarNoSabado() throws LocacaoException, FilmeSemEstoqueException{
-		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+	public void deveDevolverNaSegundaAoAlugarNoSabado() throws Exception{
 
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umfilme().agora());
 
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(7, 1, 2023));
+
 		Locacao retorno = locacaoService.alugarFilme(usuario, filmes);
 
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
+		PowerMockito.verifyNew(Date.class, Mockito.times(2)).withNoArguments();
 	}
 
 	@Test
