@@ -3,13 +3,15 @@ package br.ce.wcaquino.servicos;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
+import org.junit.runner.RunWith;
 import br.ce.wcaquino.exceptions.DivisaoPorZeroException;
 
+@RunWith(ParallelRunner.class)
 public class CalculadoraTest {
 
     @Rule
@@ -20,6 +22,12 @@ public class CalculadoraTest {
     @Before
     public void setup(){
         calc = new Calculadora();
+        System.out.println("Iniciando...");
+    }
+
+    @After
+    public void tearDown(){
+        System.out.println("finalizando...");
     }
 
     @Test
