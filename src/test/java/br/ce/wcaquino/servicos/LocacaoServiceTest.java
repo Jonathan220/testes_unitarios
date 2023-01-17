@@ -11,13 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,7 +37,6 @@ import br.ce.wcaquino.exceptions.LocacaoException;
 import br.ce.wcaquino.matchers.MatchersProprios;
 import br.ce.wcaquino.utils.DataUtils;
 
-@RunWith(ParallelRunner.class)
 public class LocacaoServiceTest {
 
 	@Rule
@@ -62,12 +61,18 @@ public class LocacaoServiceTest {
 	public void setup(){
 		MockitoAnnotations.initMocks(this);
 		locacaoService = PowerMockito.spy(locacaoService);
-		System.out.println("Iniciando...");
+		System.out.println("Iniciando2...");
+		CalculadoraTest.ordem.append("2");
 	}
 
 	@After
     public void tearDown(){
-        System.out.println("finalizando...");
+        System.out.println("finalizando2...");
+    }
+
+	@AfterClass
+    public static void tearDownClass(){
+        System.out.println(CalculadoraTest.ordem.toString());
     }
 
     @Test
